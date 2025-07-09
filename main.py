@@ -1,5 +1,5 @@
 import pandas as pd
-
+from docx import Document
 data = pd.read_csv("student_data.csv")
 data_score = data["Score"]
 
@@ -15,13 +15,18 @@ standard = data_score.std()
 
 passed_student = (data_score >= 50).sum()
 failed_student = (data_score < 50).sum()
-
-print("Total Students:", number_of_student)
-print("Mean Score:", mean_score)
-print("Median Score:", median_score)
-print("Mode Score(s):", ", ".join(map(str, mode_score)))
-print("Max Score:", max_score)
-print("Min Score:", min_score)
-print("Standard Deviation:", standard)
-print("Passed Students:", passed_student)
-print("Failed Students:", failed_student)
+report=f'''
+Total Students: {number_of_student}
+Median Score: {median_score}
+Mean Score: {mean_score}
+Mode Score(s):, {", ".join(map(str, mode_score))}
+Max Score:, {max_score}
+Min Score:, {min_score}
+Standard Deviation:, {standard}
+Passed Students:, {passed_student}
+Failed Students:, {failed_student}
+'''
+doc = Document()
+doc.add_heading("Student Score Report",level=1)
+doc.add_paragraph(report)
+doc.save('Student_score.docx')
